@@ -1,0 +1,26 @@
+---
+- name: install dependencies
+  yum: 
+    name: ['gcc', 'automake', 'libevent-devel', 'ncurses-devel', 'glibc-static', 'byacc']
+
+- name: download source
+  git:
+    repo: https://github.com/tmux/tmux.git
+    dest: /tmp/tmux
+
+- name: compile source
+  shell: sh autogen.sh && ./configure && make
+  args:
+    chdir: /tmp/tmux
+
+- name: mv tmux to /usr/local/bin
+  copy:
+    src: /tmp/tmux/tmux
+    dest: /usr/local/bin
+    remote_src: yes
+
+- name: chmod tmux
+  file: 
+    path: /usr/local/bin/tmux
+    mode: 0755
+

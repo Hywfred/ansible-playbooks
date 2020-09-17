@@ -1,0 +1,37 @@
+---
+
+- name: install dependencies
+  yum:
+    name: ['zlib-devel', 'perl', 'libcurl', 'expat']
+
+- name: download tarball
+  get_url: 
+    url: https://github.com/git/git/archive/v2.28.0.tar.gz
+    dest: /tmp/git-2.28.0.tar.gz
+
+- name: extract archive
+  unarchive: 
+    src: "/tmp/git-2.28.0.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+
+- name: config
+  shell: "autoconf && ./configure --prefix=/usr/local/git"
+  args:
+    chdir: "/tmp/git-2.28.0"
+
+- name: compile the src
+  shell: "make && make install" 
+  args:
+    chdir: "/tmp/git-2.28.0"
+
+
+#- name: add git to PATH
+#  lineinfile:
+#    dest: ~/.bashrc
+#    line: "export PATH=/usr/local/git/bin:$PATH"
+- name: add git to PATH
+  shell: echo export PATH=/usr/local/git/bin:$PATH >> ~/.bashrc
+
+- name: source bashrc
+  shell: "source ~/.bashrc"

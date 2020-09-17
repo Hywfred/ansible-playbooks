@@ -1,0 +1,33 @@
+---
+
+- name: download tarball
+  get_url: url=http://mama.indstate.edu/users/ice/tree/src/tree-1.8.0.tgz
+           dest="/tmp/tree-1.8.0.tgz"
+
+- name: extract archive
+  unarchive: src="/tmp/tree-1.8.0.tgz"
+             dest="/tmp/"
+             remote_src=yes
+
+- name: compile the src
+  shell: "make" 
+  args:
+    chdir: "/tmp/tree-1.8.0"
+
+- name: mv the excutable to /usr/local/bin
+  copy: src="/tmp/tree-1.8.0/tree"
+        dest="/usr/local/bin/tree"
+        remote_src=yes
+
+- name: chmod tree
+  file: path=/usr/local/bin/tree
+        mode=0751
+
+- name: remove directory
+  file: path=/tmp/tree-1.8.0.tgz
+        state=absent
+
+- name: remove tarball
+  file: path=/tmp/tree-1.8.0
+        state=absent
+        
