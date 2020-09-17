@@ -2,7 +2,7 @@
 
 - name: install dependencies
   yum:
-    name: ['zlib-devel', 'perl', 'libcurl', 'expat']
+    name: ['zlib-devel', 'perl', 'libcurl', 'expat', 'curl-devel']
 
 - name: download tarball
   get_url: 
